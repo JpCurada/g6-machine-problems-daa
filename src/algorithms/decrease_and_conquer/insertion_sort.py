@@ -1,21 +1,22 @@
 def fnInsertionSort(arrElements: list, boolAscending: bool = True) -> tuple[list, list]:
     """
-    Description:
-        A very simple sorting algorithm that works by iteratively inserting an
-        element from the unsorted list to the sorted list.
+    Sorts an array using the insertion sort algorithm.
+
+    Insertion sort works by iteratively taking one element from the unsorted portion
+    of the array and inserting it into its correct position in the sorted portion.
 
     Parameters:
         arrElements (list): The array to be sorted.
-        boolAscending (bool): Default value is True, which sorts the array in ascending order.
-                              Otherwise, it sorts in descending order.   
+        boolAscending (bool, optional): If True (default), sorts in ascending order.
+                                        If False, sorts in descending order.
 
-    Returns: 
+    Returns:
         tuple: A tuple containing:
-            - list: The sorted array
-            - list: List of steps showing the array state after each iteration
+            - list: The sorted array.
+            - list: A list of array states after each iteration where a change occurred.
 
     References:
-        https://www.geeksforgeeks.org/bubble-sort-algorithm/
+        https://www.geeksforgeeks.org/insertion-sort/
     """
     arrResult = arrElements.copy()
     intSize = len(arrElements)
