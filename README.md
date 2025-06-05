@@ -1,4 +1,4 @@
-# Machine Problem II: Brute Force Review and Implementation
+# Group 6: Centralized Machine Problems Repository
 
 [![Python 3.11](https://img.shields.io/badge/Python-3.11-blue.svg)](https://www.python.org/downloads/release/python-311/)
 [![Streamlit](https://img.shields.io/badge/Built%20with-Streamlit-FF4B4B.svg)](https://streamlit.io)
@@ -6,14 +6,26 @@
 
 ## Table of Contents
 - [Overview](#overview)
+- [Branch Structure](#branch-structure)
+- [Directory Structure](#directory-structure)
 - [Group Members](#group-members)
-- [Project Goals](#project-goals)
 - [Environment Setup](#environment-setup)
 - [Usage](#usage)
-- [Contributing](#contributing)
 
 ## Overview
-This project involves the review and implementation of various brute force algorithms as part of Machine Problem 2 in the Design and Analysis of Algorithms course. The application is built using Python 3.11 and Streamlit, providing an interactive interface for exploring algorithmic concepts.
+This repository serves as the centralized hub for all machine problems (MPs) of Group 6 in the Design and Analysis of Algorithms course. Each machine problem is developed and maintained in its own branch, while the `main` branch compiles all completed and reviewed work. This repository is intended solely for the use of Group 6 members as part of their coursework.
+
+## Branch Structure
+- **mp2-dev**: Development branch for Machine Problem 2
+- **mp3-dev**: Development branch for Machine Problem 3
+- **mp4-dev**: Development branch for Machine Problem 4
+- **mp5-dev**: Development branch for Machine Problem 5
+- **main**: Compilation of all finalized machine problems and documentation
+
+## Directory Structure
+- `adr/` — Algorithm Design Reports and documentation, organized by machine problem
+- `src/algorithms/` — Source code for algorithms, organized by paradigm and machine problem
+- `machine_problems/` — Problem statements and reference materials
 
 ## Group Members
 - CURADA, John Paul M.
@@ -26,11 +38,6 @@ This project involves the review and implementation of various brute force algor
 - RAMILO, Gian G.
 - MAGTANONG, Gabriel Andre E.
 
-## Project Goals
-- Implement and analyze brute force algorithms such as Selection Sort, Bubble Sort, Sequential Search, Traveling Salesman Problem, and Knapsack Problem.
-- Provide a user-friendly interface for visualizing algorithm behavior and performance.
-- Explore optimization techniques and their impact on algorithm efficiency.
-
 ## Environment Setup
 
 ### Installing Python
@@ -38,8 +45,8 @@ This project involves the review and implementation of various brute force algor
    ```
    winget install -e --id Python.Python.3.11
    ```
-2. During installation, ensure you check the `Add to PATH` option for a smooth workflow.
-3. Verify installation by opening command prompt and running:
+2. During installation, ensure you check the `Add to PATH` option.
+3. Verify installation:
    ```
    python --version
    ```
@@ -53,37 +60,29 @@ We'll use UV as our package manager:
    ```
 
 ## Usage
-1. Clone the repository:
+
+1. **Clone the repository:**
    ```
-   git clone https://github.com/JpCurada/g6-mp2-desalgo.git
-   cd g6-mp2-desalgo
+   git clone https://github.com/JpCurada/g6-machine-problems-daa.git
+   cd g6-machine-problems-daa
    ```
-2. Install dependencies:
+2. **Switch to the desired branch:**
+   ```
+   git checkout mp2-dev   # or mp3-dev, mp4-dev, mp5-dev, main
+   ```
+3. **Install dependencies:**
    ```
    uv install
    ```
-3. Run the Streamlit application:
+4. **Run the Streamlit application (if available):**
    ```
    streamlit run src/streamlit_app.py
    ```
-4. Open your web browser and navigate to `http://localhost:8501` to explore the application.
+5. **Open your browser and go to** `http://localhost:8501`
 
-## Contributing
-We welcome contributions! Please follow these steps:
-1. Fork the repository.
-2. Create a new branch for your feature or bug fix:
-   ```
-   git checkout -b feature-name
-   ```
-3. Commit your changes:
-   ```
-   git commit -m "Description of changes"
-   ```
-4. Push to your branch:
-   ```
-   git push origin feature-name
-   ```
-5. Open a pull request and describe your changes.
+---
+
+*This repository is for academic use only by Group 6 members of the Design and Analysis of Algorithms course. 
 
 
 
