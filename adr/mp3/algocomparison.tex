@@ -1,0 +1,147 @@
+\documentclass{article}
+\usepackage{graphicx}
+\usepackage{longtable}
+\usepackage{url}
+
+\title{Machine Problem \#3}
+\author{Florence Lee Cansino}
+\date{June 2025}
+
+\begin{document}
+
+\maketitle
+
+\section{IV. Algorithm Comparison}
+
+\begin{longtable}{|p{2.5cm}|p{4.3cm}|p{4.3cm}|p{4.cm}|}
+\hline
+\textbf{Algorithm} & \textbf{Strengths} & \textbf{Weaknesses} & \textbf{Real-World \newline Applications} \\
+\hline
+\endfirsthead
+\hline
+\textbf{Algorithm} & \textbf{Strengths} & \textbf{Weaknesses} & \textbf{Real-World Applications} \\
+\hline
+\endhead
+
+Insertion Sort &
+\begin{itemize}
+\itemindent=-13pt
+\item Simple and easy to implement (Wandy, 2022)
+\item Works well with small and nearly sorted data (Wandy, 2022)
+\item Requires minimal space as it is stable and in-place (Wandy, 2022)
+\end{itemize}
+&
+According to Youcademy (n.d.), the disadvantages of Insertion Sort are as follows:
+\begin{itemize}
+\itemindent=-13pt
+\item Less suitable for larger data sets
+\item Performs a lot of element shifts
+\item Cannot be divided into separate tasks to run at the same time.
+\end{itemize}
+&
+\begin{itemize}
+\itemindent=-13pt
+\item Online leaderboards in applications with score and ranking system (Broussard, 2024)
+\item Mobile phone contact lists (Broussard, 2024)
+\item Sorting tasks in task management apps (Broussard, 2024)
+\item Song playlist management (Broussard, 2024)
+\end{itemize}
+\\
+\hline
+
+Binary Search &
+\begin{itemize}
+\itemindent=-13pt
+\item Efficient in sorted large data sets (Jaro Education, 2023)
+\item Fast lookup with O(log n) time complexity (GeeksforGeeks, 2025)
+\item Reduced search time because it eliminates half of the array every step (GeeksforGeeks, 2025)
+\end{itemize}
+&
+Binary Search has several limitations as stated by Jaro Education (2023):
+\begin{itemize}
+\itemindent=-13pt
+\item Only applicable for sorted arrays
+\item Complex and unnecessary for small data sets
+\item Can be inefficient if implemented recursively with limited memory 
+\end{itemize}
+&
+Youcademy (n.d.) highlights that Binary Search is applied in real-world scenarios such as:
+\begin{itemize}
+\itemindent=-13pt
+\item Filtering items when searching for a product in e-commerce 
+\item Used in database indexing
+\item Searching for a word in a dictionary or digital word lists
+\end{itemize}
+\\
+\hline
+
+Russian Multiplication Method &
+\begin{itemize}
+\itemindent=-13pt
+\item Only requires doubling and halving when implementing (MathCurious, 2019)
+\item Suitable for manual and mental computations (Peterson, 2024)
+\item Does not require advanced mathematics (MathCurious, 2019)
+\end{itemize}
+&
+
+\begin{itemize}
+\itemindent=-13pt
+\item Limited applications as it cannot be applied to negative numbers (MathCurious, 2019)
+\item No direct counterpart for division (Peterson, 2024)
+\item Not practical for larger numbers (MathCurious, 2019)
+\end{itemize}
+&
+MathCurious (2019) highlights the following real-world uses of this algorithm:
+\begin{itemize}
+\itemindent=-13pt
+\item Practical for teaching concepts of mathematics
+\item Useful as a mental computation technique
+\item Teaching concepts of binary number system
+\end{itemize}
+\\
+\hline
+
+Josephus Problem &
+According to OpenGenus (n.d.), the Josephus Problem has the following advantages:
+\begin{itemize}
+\itemindent=-13pt
+\item Can be implemented for any number of people and interval sizes
+\item Can have iterative, recursive, and mathematical formula approaches
+\item Performs greatly because of O(n) time complexity and O(1) space complexity 
+\end{itemize}
+&
+\begin{itemize}
+\itemindent=-13pt
+\item Might cause stack overflow in large inputs if recursively implemented (Mohandas, A.) 
+\item Have limited implementations compared to other algorithms (Mohandas, A.)
+\end{itemize}
+&
+\begin{itemize}
+\itemindent=-13pt
+\item Round-Robin process scheduling in operation systems (Trivedi, 2021)
+\item Used to solve circular linked lists (Trivedi, 2021)
+\item Used to solve network topology problems (Singh, 2024)
+\end{itemize}
+\\
+\hline
+
+
+\end{longtable}
+
+\clearpage
+\begin{thebibliography}{}
+
+\bibitem {insertion} Wandy, J. (2022, March 24). \textit{The Advantages and Disadvantages of Sorting Algorithms}. Sciencing. \url{https://www.sciencing.com/the-advantages-disadvantages-of-sorting-algorithms-12749529/}
+\bibitem {insertion} Youcademy. (n.d.). \textit{Advantages and Disadvantages of Insertion Sort Algorithm}. Youcademy. \url{https://youcademy.org/advantages-disadvantages-of-insertion-sort/#disadvantages-of-insertion-sort}
+\bibitem {insertion} Broussard, A. (2024, January 25). \textit{Insertion Sort: A Fundamental Sorting Algorithm}. LinkedIn. \url{https://www.linkedin.com/pulse/insertion-sort-fundamental-sorting-algorithm-ashley-m-broussard-mvwle/}
+\bibitem{binarysearch} Jaro Education. (2023, August 16) \textit{Binary Search Algorithm: Benefits, and Examples}. Jaro Education. \url{https://www.jaroeducation.com/blog/binary-search-algorithm/}
+\bibitem{binarysearch} GeeksforGeeks. (2025, May 12) \textit{Binary Search Algorithm - Iterative and Recursive Implementation}. GeeksforGeeks. \url{https://www.geeksforgeeks.org/binary-search/}
+
+\bibitem{russian-multiplication} Peterson, D. (2024, February 2) \textit{Russian Peasant Multiplication: How and Why}. The Math Doctors. \url{https://www.themathdoctors.org/russian-peasant-multiplication-how-and-why/}
+\bibitem{russian-multiplication} MathCurious. (2019, December 29) \textit{The Russian Multiplication Method}. MathCurious. \url{https://www.mathsisfun.com/numbers/russian-peasant-multiplication.html}
+\bibitem{josephus-problem} Mohandas, A. (n.d.) \textit{Josephus Problem}. OpenGenus. \url{https://iq.opengenus.org/josephus-problem/}
+\bibitem{josephus-problem} Trivedi, A. (2021, November 8) \textit{Josephus Circle Using Circular Linked List}. OpenGenus. \url{https://www.prepbytes.com/blog/linked-list/josephus-circle-using-circular-linked-list/}
+\bibitem{josephus-problem} Singh, M. (2024, January 13) \textit{Exploring Josephus Interconnection Networks : Unveiling Architecture, Applications, and Recent Advancements}. IJSRCSEIT. \url{https://ijsrcseit.com/home/issue/view/article.php?id=CSEIT2410132}
+\end{thebibliography}
+
+\end{document}
