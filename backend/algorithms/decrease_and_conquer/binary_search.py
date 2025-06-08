@@ -1,6 +1,3 @@
-from utils.helpers import timeit
-
-@timeit
 def fnBinarySearch(arrElements: list, varTarget) -> tuple[int, list]:
     """
     Searches for a target element in a sorted array using the binary search algorithm.

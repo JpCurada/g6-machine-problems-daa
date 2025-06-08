@@ -8,11 +8,11 @@ insights into the practical constraints and inefficiencies of these algorithms.
 Contributed by Ken Audie Lucero and Izabelle Oja
 """
 
-from src.algorithms.decrease_and_conquer.insertion_sort import fnInsertionSort
-from src.algorithms.decrease_and_conquer.binary_search import fnBinarySearch
-from src.utils.helpers import create_array, timeit
-from src.algorithms.decrease_and_conquer.josephus_problem import josephus_problem
-from src.algorithms.decrease_and_conquer.russian_peasant_multiplication import russian_multiply
+from backend.algorithms.decrease_and_conquer.insertion_sort import fnInsertionSort
+from backend.algorithms.decrease_and_conquer.binary_search import fnBinarySearch
+from backend.utils.helpers import create_array, timeit
+from backend.algorithms.decrease_and_conquer.josephus_problem import josephus_problem
+from backend.algorithms.decrease_and_conquer.russian_peasant_multiplication import russian_multiply
 import time
 import sys
 import random

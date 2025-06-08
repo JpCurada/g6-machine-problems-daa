@@ -1,6 +1,0 @@
-[theme]
-base = "dark"
-primaryColor = "#7C3AED"              # Vibrant purple accent
-backgroundColor = "#18181B"           # Deep dark background
-secondaryBackgroundColor = "#23232A"  # Slightly lighter for cards/containers
-font = "sans serif"  
