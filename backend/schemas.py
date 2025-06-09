@@ -145,6 +145,8 @@ class RussianMultiplyResponse(BaseModel):
     execution_time: float
     algorithm: str
     steps_count: int
+    multiplier: int
+    multiplicand: int
 
 class LimitationAnalysisResponse(BaseModel):
     algorithm: str

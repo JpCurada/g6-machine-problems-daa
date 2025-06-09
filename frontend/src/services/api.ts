@@ -92,6 +92,8 @@ export interface RussianMultiplyResponse {
   execution_time: number;
   algorithm: string;
   steps_count: number;
+  multiplier: number;
+  multiplicand: number;
 }
 
 // API Client class

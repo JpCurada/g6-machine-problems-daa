@@ -252,7 +252,9 @@ async def russian_multiply_endpoint(request: RussianMultiplyRequest):
         doubling_sequence=doubling,
         execution_time=exec_time,
         algorithm="russian-multiplication",
-        steps_count=len(halving)
+        steps_count=len(halving),
+        multiplier=request.multiplier,
+        multiplicand=request.multiplicand
     )
 
 # ===== LIMITATION ANALYSIS ENDPOINTS =====
