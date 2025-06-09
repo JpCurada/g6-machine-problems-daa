@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+
 import {
     useBubbleSort,
     useSelectionSort,
@@ -18,7 +19,7 @@ interface AlgorithmOptions {
 interface InputField {
     name: string;
     label: string;
-    type: 'text' | 'number' | 'array';
+    type: 'text' | 'number' | 'array' | 'toggle';
     placeholder?: string;
 }
 
@@ -28,11 +29,40 @@ interface ApiResult {
     error: string | null;
 }
 
+//toggle
+interface ToggleProps {
+    checked: boolean;
+    onChange: (checked: boolean) => void;
+}
+
+const Toggle: React.FC<ToggleProps> = ({ checked, onChange }) => {
+    return (
+        <div className="flex items-center">
+            <button
+                type="button"
+                onClick={() => onChange(!checked)}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-2 focus:ring-offset-slate-700 ${
+                    checked ? 'bg-teal-600' : 'bg-slate-500'
+                }`}
+            >
+                <span
+                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                        checked ? 'translate-x-6' : 'translate-x-1'
+                    }`}
+                />
+            </button>
+            <span className="ml-3 text-sm font-medium text-slate-300">
+                {checked ? 'Ascending' : 'Descending'}
+            </span>
+        </div>
+    );
+};
+
 const SimulationPage: React.FC = () => {
     const [selectedStrategy, setSelectedStrategy] = useState<string>('');
     const [selectedAlgorithm, setSelectedAlgorithm] = useState<string>('');
     const [inputFields, setInputFields] = useState<InputField[]>([]);
-    const [inputValues, setInputValues] = useState<{[key: string]: string}>({});
+    const [inputValues, setInputValues] = useState<{[key: string]: string | boolean}>({}); {/* added bool*/}
     const [currentResult, setCurrentResult] = useState<ApiResult>({ data: null, loading: false, error: null });
 
     // Initialize all hooks
@@ -116,7 +146,7 @@ const SimulationPage: React.FC = () => {
             case 'Insertion Sort':
                 return [
                     { name: 'array', label: 'Array to Sort', type: 'array', placeholder: 'e.g., 64,34,25,12,22,11,90' },
-                    { name: 'ascending', label: 'Sort Order (true=asc, false=desc)', type: 'text', placeholder: 'true' }
+                    { name: 'isAscending', label: 'Sort Order', type: 'toggle'}
                 ];
             case 'Josephus Problem':
                 return [
@@ -130,64 +160,64 @@ const SimulationPage: React.FC = () => {
                 ];
             default:
                 return [
-                    { name: 'input', label: 'Input Data', type: 'text', placeholder: 'Enter your input data' }
+                    { name: 'input', label: 'Input Data', type: 'text', placeholder: 'Enter your input data' },
                 ];
         }
     };
 
     // Transform input data for API
-    const transformInputData = (algorithm: string, inputs: {[key: string]: string}) => {
+    const transformInputData = (algorithm: string, inputs: {[key: string]: string | boolean}) => {
         try {
             switch (algorithm) {
                 case 'Bubble Sort':
                 case 'Selection Sort':
                 case 'Insertion Sort':
                     return {
-                        array: inputs.array?.split(',').map((n: string) => parseFloat(n.trim())).filter((n: number) => !isNaN(n)) || [],
-                        ascending: inputs.ascending?.toLowerCase() !== 'false'
+                        array: inputs.array?.toString().split(',').map((n: string) => parseFloat(n.trim())).filter((n: number) => !isNaN(n)) || [],
+                        ascending: inputs.isAscending === true || inputs.isAscending === 'true'
                     };
 
                 case 'Binary Search':
                     return {
-                        array: inputs.array?.split(',').map((n: string) => parseFloat(n.trim())).filter((n: number) => !isNaN(n)) || [],
-                        target: parseFloat(inputs.target || '0')
+                        array: inputs.array?.toString().split(',').map((n: string) => parseFloat(n.trim())).filter((n: number) => !isNaN(n)) || [],
+                        target: parseFloat(inputs.target?.toString() || '0')
                     };
 
                 case 'Sequential Search':
                     return {
-                        array: inputs.array?.split(',').map((n: string) => n.trim()) || [],
-                        target: inputs.target?.trim() || ''
+                        array: inputs.array?.toString().split(',').map((n: string) => n.trim()) || [],
+                        target: inputs.target?.toString().trim() || ''
                     };
 
                 case 'Travelling Salesman Problem':
-                    const matrix = inputs.distance_matrix?.split(';').map((row: string) => 
+                    const matrix = inputs.distance_matrix?.toString().split(';').map((row: string) =>
                         row.split(',').map((n: string) => parseFloat(n.trim())).filter((n: number) => !isNaN(n))
                     ) || [];
                     return {
                         distance_matrix: matrix,
-                        start_city: parseInt(inputs.start_city || '0')
+                        start_city: parseInt(inputs.start_city?.toString() || '0')
                     };
 
                 case 'Knapsack Problem':
-                    const items = inputs.items?.split(',').map((item: string) => {
+                    const items = inputs.items?.toString().split(',').map((item: string) => {
                         const [name, weight, value] = item.split(':');
                         return [name?.trim() || '', parseFloat(weight || '0'), parseFloat(value || '0')] as [string, number, number];
                     }) || [];
                     return {
                         items: items,
-                        capacity: parseInt(inputs.capacity || '0')
+                        capacity: parseInt(inputs.capacity?.toString() || '0')
                     };
 
                 case 'Josephus Problem':
                     return {
-                        length: parseInt(inputs.length || '0'),
-                        interval: parseInt(inputs.interval || '0')
+                        length: parseInt(inputs.length?.toString() || '0'),
+                        interval: parseInt(inputs.interval?.toString() || '0')
                     };
 
                 case 'Russian Multiplication Method':
                     return {
-                        multiplier: parseInt(inputs.multiplier || '0'),
-                        multiplicand: parseInt(inputs.multiplicand || '0')
+                        multiplier: parseInt(inputs.multiplier?.toString() || '0'),
+                        multiplicand: parseInt(inputs.multiplicand?.toString() || '0')
                     };
 
                 default:
@@ -213,9 +243,13 @@ const SimulationPage: React.FC = () => {
         if (selectedAlgorithm) {
             const fields = getInputFields(selectedAlgorithm);
             setInputFields(fields);
-            const newInputValues: {[key: string]: string} = {};
+            const newInputValues: {[key: string]: string | boolean} = {};
             fields.forEach(field => {
-                newInputValues[field.name] = '';
+                if (field.type === 'toggle') {
+                    newInputValues[field.name] = true; // Default to true for ascending
+                } else {
+                    newInputValues[field.name] = '';
+                }
             });
             setInputValues(newInputValues);
             setCurrentResult({ data: null, loading: false, error: null });
@@ -245,7 +279,7 @@ const SimulationPage: React.FC = () => {
         russianMultiply.data, russianMultiply.loading, russianMultiply.error
     ]);
 
-    const handleInputChange = (fieldName: string, value: string) => {
+    const handleInputChange = (fieldName: string, value: string | boolean) => {
         setInputValues(prev => ({
             ...prev,
             [fieldName]: value
@@ -253,6 +287,12 @@ const SimulationPage: React.FC = () => {
     };
 
     const handleSimulate = async () => {
+        console.log('Simulating:', { selectedStrategy, selectedAlgorithm, inputValues });
+        if ('isAscending' in inputValues) {
+            const isAscending = inputValues.isAscending as boolean;
+            console.log('Sort order:', isAscending ? 'Ascending' : 'Descending');
+        }
+
         const apiHook = getApiHook(selectedAlgorithm);
         if (!apiHook) {
             alert('Algorithm not implemented yet');
@@ -304,7 +344,7 @@ const SimulationPage: React.FC = () => {
         const data = currentResult.data;
 
         return (
-            <div className="text-white space-y-4">
+            <div className="text-black space-y-4">
                 <div className="border-b border-white border-opacity-20 pb-3">
                     <h3 className="text-lg font-semibold text-teal-200">{selectedAlgorithm} - Results</h3>
                     <p className="text-sm text-gray-300">Execution Time: {data.execution_time?.toFixed(2)}ms</p>
@@ -428,7 +468,7 @@ const SimulationPage: React.FC = () => {
     };
 
     return (
-        <div className="bg-slate-800 text-white min-h-screen">
+        <div className="bg-[#45A29E] text-white min-h-screen">
             <div className="container mx-auto px-4 py-8">
                 <div className="grid lg:grid-cols-12 gap-6 h-full">
                     {/* Left Section - Strategy and Algorithm Selection */}
@@ -495,9 +535,14 @@ const SimulationPage: React.FC = () => {
                                             <label className="block text-sm font-medium text-slate-300 mb-2">
                                                 {field.label}
                                             </label>
-                                            {field.type === 'array' ? (
+                                            {field.type === 'toggle' ? (
+                                                <Toggle
+                                                    checked={inputValues[field.name] as boolean}
+                                                    onChange={(checked) => handleInputChange(field.name, checked)}
+                                                />
+                                            ) : field.type === 'array' ? (
                                                 <textarea
-                                                    value={inputValues[field.name] || ''}
+                                                    value={inputValues[field.name]?.toString() || ''}
                                                     onChange={(e) => handleInputChange(field.name, e.target.value)}
                                                     placeholder={field.placeholder}
                                                     disabled={currentResult.loading}
@@ -506,8 +551,8 @@ const SimulationPage: React.FC = () => {
                                                 />
                                             ) : (
                                                 <input
-                                                    type={field.type}
-                                                    value={inputValues[field.name] || ''}
+                                                    type={field.type === 'number' ? 'number' : 'text'}
+                                                    value={inputValues[field.name]?.toString() || ''}
                                                     onChange={(e) => handleInputChange(field.name, e.target.value)}
                                                     placeholder={field.placeholder}
                                                     disabled={currentResult.loading}
@@ -540,7 +585,7 @@ const SimulationPage: React.FC = () => {
 
                     {/* Right section - Results/Visualization */}
                     <div className="lg:col-span-5">
-                        <div className="bg-teal-600 rounded-lg p-6 h-full">
+                        <div className="bg-[#1F2833] rounded-lg p-6 h-full">
                             <div className="flex items-center mb-4">
                                 <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
@@ -548,11 +593,11 @@ const SimulationPage: React.FC = () => {
                                 <h2 className="text-xl font-semibold text-white">RESULTS & VISUALIZATION</h2>
                             </div>
 
-                            <div className="bg-white bg-opacity-10 rounded-lg p-4 h-96 overflow-auto">
+                            <div className="bg-[#C5C6C7] bg-opacity-10 rounded-lg p-4 h-96 overflow-auto">
                                 {selectedAlgorithm ? (
                                     renderResults()
                                 ) : (
-                                    <div className="flex items-center justify-center h-full text-white opacity-75">
+                                    <div className="flex items-center justify-center h-full text-black opacity-75"> {/* Initial display*/}
                                         <div className="text-center">
                                             <svg className="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
