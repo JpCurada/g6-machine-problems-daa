@@ -1,5 +1,5 @@
 // frontend-2/src/services/api.ts
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api';
+const API_BASE_URL = 'http://localhost:8000/api';
 
 // Type definitions based on your backend schemas
 export interface SortRequest {
