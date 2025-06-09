@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const Header: React.FC = () => {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const location = useLocation();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -12,6 +14,44 @@ const Header: React.FC = () => {
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
+
+    // Function to handle navigation - works both within page and cross-page
+    const handleNavClick = (href: string) => {
+        setIsMobileMenuOpen(false);
+        
+        // Check if we're on the landing page
+        if (location.pathname === '/') {
+            // We're on the landing page, scroll to section
+            setTimeout(() => {
+                const element = document.querySelector(href);
+                if (element) {
+                    element.scrollIntoView({ 
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            }, 100);
+        } else {
+            // We're on another page, navigate to landing page with hash
+            navigate(`/${href}`);
+        }
+    };
+
+    // Handle hash navigation when arriving at landing page from other pages
+    useEffect(() => {
+        if (location.pathname === '/' && location.hash) {
+            // Small delay to ensure page is rendered
+            setTimeout(() => {
+                const element = document.querySelector(location.hash);
+                if (element) {
+                    element.scrollIntoView({ 
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            }, 300);
+        }
+    }, [location]);
 
     return (
         <header className={`fixed w-full z-50 transition-all duration-300 ${
@@ -44,21 +84,33 @@ const Header: React.FC = () => {
                     <nav className="hidden md:flex items-center space-x-8">
                         <a
                             href="#about"
-                            className="relative text-slate-300 hover:text-white transition-all duration-300 group py-2"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                handleNavClick('#about');
+                            }}
+                            className="relative text-slate-300 hover:text-white transition-all duration-300 group py-2 cursor-pointer"
                         >
                             About
                             <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-teal-400 to-cyan-500 group-hover:w-full transition-all duration-300"></span>
                         </a>
                         <a
                             href="#features"
-                            className="relative text-slate-300 hover:text-white transition-all duration-300 group py-2"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                handleNavClick('#features');
+                            }}
+                            className="relative text-slate-300 hover:text-white transition-all duration-300 group py-2 cursor-pointer"
                         >
                             Features
                             <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-teal-400 to-cyan-500 group-hover:w-full transition-all duration-300"></span>
                         </a>
                         <a
                             href="#team"
-                            className="relative text-slate-300 hover:text-white transition-all duration-300 group py-2"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                handleNavClick('#team');
+                            }}
+                            className="relative text-slate-300 hover:text-white transition-all duration-300 group py-2 cursor-pointer"
                         >
                             Team
                             <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-teal-400 to-cyan-500 group-hover:w-full transition-all duration-300"></span>
@@ -85,9 +137,36 @@ const Header: React.FC = () => {
                 {/* Mobile Menu */}
                 <div className={`md:hidden overflow-hidden transition-all duration-300 ${isMobileMenuOpen ? 'max-h-64 opacity-100' : 'max-h-0 opacity-0'}`}>
                     <nav className="pt-4 pb-2 space-y-2">
-                        <a href="#about" className="block text-slate-300 hover:text-white hover:bg-slate-800/50 px-4 py-3 rounded-lg transition-colors">About</a>
-                        <a href="#features" className="block text-slate-300 hover:text-white hover:bg-slate-800/50 px-4 py-3 rounded-lg transition-colors">Features</a>
-                        <a href="#team" className="block text-slate-300 hover:text-white hover:bg-slate-800/50 px-4 py-3 rounded-lg transition-colors">Team</a>
+                        <a 
+                            href="#about" 
+                            onClick={(e) => {
+                                e.preventDefault();
+                                handleNavClick('#about');
+                            }}
+                            className="block text-slate-300 hover:text-white hover:bg-slate-800/50 px-4 py-3 rounded-lg transition-colors cursor-pointer"
+                        >
+                            About
+                        </a>
+                        <a 
+                            href="#features" 
+                            onClick={(e) => {
+                                e.preventDefault();
+                                handleNavClick('#features');
+                            }}
+                            className="block text-slate-300 hover:text-white hover:bg-slate-800/50 px-4 py-3 rounded-lg transition-colors cursor-pointer"
+                        >
+                            Features
+                        </a>
+                        <a 
+                            href="#team" 
+                            onClick={(e) => {
+                                e.preventDefault();
+                                handleNavClick('#team');
+                            }}
+                            className="block text-slate-300 hover:text-white hover:bg-slate-800/50 px-4 py-3 rounded-lg transition-colors cursor-pointer"
+                        >
+                            Team
+                        </a>
                         <Link to="/simulation" className="block bg-gradient-to-r from-teal-500 to-cyan-500 text-white px-4 py-3 rounded-lg font-semibold text-center">Launch Simulator</Link>
                     </nav>
                 </div>

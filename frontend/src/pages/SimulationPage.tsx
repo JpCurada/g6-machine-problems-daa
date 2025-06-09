@@ -358,13 +358,13 @@ const SimulationPage: React.FC = () => {
 
             {/* Main Content */}
             <div className="relative z-10 container mx-auto px-4 pb-12">
-                <div className="grid lg:grid-cols-12 gap-8">
+                <div className="grid lg:grid-cols-12 gap-8 items-start">
                     {/* Left Section - Configuration */}
                     <div className="lg:col-span-5 space-y-6">
                         {/* Strategy & Algorithm Selection */}
                         <div className="group relative">
-                            <div className="absolute inset-0 bg-gradient-to-br from-teal-500/20 to-cyan-500/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-300 opacity-0 group-hover:opacity-100"></div>
-                            <div className="relative bg-slate-800/50 backdrop-blur-sm rounded-3xl border border-slate-700/50 hover:border-teal-500/50 transition-all duration-300 p-6">
+                            <div className="absolute inset-0 bg-gradient-to-br from-teal-500/20 to-cyan-500/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-300 opacity-0 group-hover:opacity-100 -z-10"></div>
+                            <div className="relative bg-slate-800/50 backdrop-blur-sm rounded-3xl border border-slate-700/50 hover:border-teal-500/50 transition-all duration-300 p-6 z-10">
                                 <div className="flex items-center mb-6">
                                     <div className="w-12 h-12 bg-gradient-to-br from-teal-500 to-cyan-500 rounded-xl flex items-center justify-center shadow-lg mr-4">
                                         <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -390,8 +390,8 @@ const SimulationPage: React.FC = () => {
 
                         {/* Input Configuration */}
                         <div className="group relative">
-                            <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-300 opacity-0 group-hover:opacity-100"></div>
-                            <div className="relative bg-slate-800/50 backdrop-blur-sm rounded-3xl border border-slate-700/50 hover:border-cyan-500/50 transition-all duration-300 p-6">
+                            <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/20 to-blue-500/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-300 opacity-0 group-hover:opacity-100 -z-10"></div>
+                            <div className="relative bg-slate-800/50 backdrop-blur-sm rounded-3xl border border-slate-700/50 hover:border-cyan-500/50 transition-all duration-300 p-6 z-10">
                                 <div className="flex items-center mb-6">
                                     <div className="w-12 h-12 bg-gradient-to-br from-cyan-500 to-blue-500 rounded-xl flex items-center justify-center shadow-lg mr-4">
                                         <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -418,9 +418,9 @@ const SimulationPage: React.FC = () => {
 
                     {/* Right Section - Visualization */}
                     <div className="lg:col-span-7">
-                        <div className="group relative h-full">
-                            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 via-blue-500/20 to-teal-500/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-300"></div>
-                            <div className="relative bg-slate-800/40 backdrop-blur-md rounded-3xl border border-slate-700/50 hover:border-purple-500/50 transition-all duration-300 p-6 h-full min-h-[600px]">
+                        <div className="group relative min-h-[700px] lg:min-h-[800px]">
+                            <div className="absolute inset-0 bg-gradient-to-br from-purple-500/20 via-blue-500/20 to-teal-500/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-300 -z-10"></div>
+                            <div className="relative bg-slate-800/40 backdrop-blur-md rounded-3xl border border-slate-700/50 hover:border-purple-500/50 transition-all duration-300 p-6 h-full z-10 flex flex-col">
                                 {/* Header */}
                                 <div className="flex items-center justify-between mb-6">
                                     <div className="flex items-center">
@@ -462,7 +462,7 @@ const SimulationPage: React.FC = () => {
                                 </div>
 
                                 {/* Content Area */}
-                                <div className="bg-slate-900/50 backdrop-blur-sm rounded-2xl border border-slate-700/30 p-6 h-full overflow-auto">
+                                <div className="bg-slate-900/50 backdrop-blur-sm rounded-2xl border border-slate-700/30 p-6 flex-1 overflow-auto">
                                     {!selectedAlgorithm && (
                                         <div className="flex flex-col items-center justify-center h-full text-center">
                                             <div className="w-24 h-24 bg-gradient-to-br from-slate-600 to-slate-700 rounded-2xl flex items-center justify-center mb-6">

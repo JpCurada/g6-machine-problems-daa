@@ -230,7 +230,13 @@ const ResultsSection: React.FC<ResultsSectionProps> = ({
 
             {(selectedAlgorithm === 'Sequential Search' || selectedAlgorithm === 'Binary Search') && (
                 <div className="space-y-4">
-                    <SearchVisualization data={data} />
+                    <SearchVisualization 
+                        data={data} 
+                        stepIndex={stepIndex}
+                        isAnimating={isAnimating}
+                        startAnimation={startAnimation}
+                        resetAnimation={resetAnimation}
+                    />
                     
                     {/* Search-specific metrics */}
                     <div className="bg-slate-700 bg-opacity-30 rounded-lg p-4">
@@ -500,17 +506,7 @@ const ResultsSection: React.FC<ResultsSectionProps> = ({
                         Processed through <span className="font-semibold">{data.steps.length}</span> computational steps
                     </p>
                 )}
-                <div className="mt-4 flex justify-center space-x-4 text-sm">
-                    <div className="bg-white bg-opacity-20 rounded-full px-4 py-2">
-                        <span className="text-teal-100">✨ Interactive Visualization</span>
-                    </div>
-                    <div className="bg-white bg-opacity-20 rounded-full px-4 py-2">
-                        <span className="text-teal-100">📊 Detailed Metrics</span>
-                    </div>
-                    <div className="bg-white bg-opacity-20 rounded-full px-4 py-2">
-                        <span className="text-teal-100">⚡ Real-time Analysis</span>
-                    </div>
-                </div>
+
             </div>
         </div>
     );
