@@ -210,23 +210,6 @@ const JosephusVisualization: React.FC<JosephusVisualizationProps> = ({
                             )}
                         </g>
                     ))}
-
-                    {/* Center decoration */}
-                    <g className="animate-spin-slow">
-                        <circle
-                            cx={center.x}
-                            cy={center.y}
-                            r="12"
-                            className="fill-slate-800/90 stroke-teal-500/30"
-                            strokeWidth="1"
-                        />
-                        <circle
-                            cx={center.x}
-                            cy={center.y}
-                            r="6"
-                            className="fill-teal-500/50"
-                        />
-                    </g>
                 </svg>
             </div>
         </div>
