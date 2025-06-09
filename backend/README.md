@@ -10,7 +10,7 @@ pip install -r requirements.txt
 
 cd ..
 
-uvicorn backend.main:app --reload
+uvicorn backend.api:app --reload
 
 tapos sa browser, punta kasa localhost:8000
 
