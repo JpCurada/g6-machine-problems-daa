@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import HexeCuteLogo from "../assets/HexeCuteLogo.svg";
+
 
 const Header: React.FC = () => {
     const [isScrolled, setIsScrolled] = useState(false);
@@ -64,11 +66,8 @@ const Header: React.FC = () => {
                     {/* Enhanced Logo */}
                     <Link to="/" className="flex items-center group">
                         <div className="relative">
-                            <div className="w-10 h-10 bg-gradient-to-br from-teal-400 via-cyan-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-all duration-300">
-                                <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 2L2 7V10C2 16 6 21.5 12 23C18 21.5 22 16 22 10V7L12 2Z" />
-                                </svg>
-                                {/* Glow effect */}
+                            <div className="w-10 h-10 flex items-center justify-center shadow-md transform group-hover:scale-110 transition-all duration-300">
+                                <img src={HexeCuteLogo} alt="Logo" className="w-16 h-16" />
                                 <div className="absolute inset-0 bg-gradient-to-br from-teal-400 via-cyan-500 to-blue-600 rounded-xl blur-sm opacity-0 group-hover:opacity-50 transition-opacity duration-300"></div>
                             </div>
                         </div>
