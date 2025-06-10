@@ -1,31 +1,46 @@
 # Group 6: Centralized Machine Problems Repository
 
 [![Python 3.11](https://img.shields.io/badge/Python-3.11-blue.svg)](https://www.python.org/downloads/release/python-311/)
-[![Streamlit](https://img.shields.io/badge/Built%20with-Streamlit-FF4B4B.svg)](https://streamlit.io)
-[![GitHub](https://img.shields.io/badge/View%20on-GitHub-green.svg)](https://github.com/JpCurada/g6-mp2-desalgo)
+[![React](https://img.shields.io/badge/Built%20with-React-61DAFB.svg)](https://reactjs.org/)
+[![FastAPI](https://img.shields.io/badge/API-FastAPI-009688.svg)](https://fastapi.tiangolo.com/)
+[![TypeScript](https://img.shields.io/badge/Built%20with-TypeScript-3178C6.svg)](https://www.typescriptlang.org/)
 
 ## Table of Contents
 - [Overview](#overview)
-- [Branch Structure](#branch-structure)
+- [Architecture](#architecture)
 - [Directory Structure](#directory-structure)
 - [Group Members](#group-members)
 - [Environment Setup](#environment-setup)
 - [Usage](#usage)
 
 ## Overview
-This repository serves as the centralized hub for all machine problems (MPs) of Group 6 in the Design and Analysis of Algorithms course. Each machine problem is developed and maintained in its own branch, while the `main` branch compiles all completed and reviewed work. This repository is intended solely for the use of Group 6 members as part of their coursework.
+This repository serves as the centralized hub for all machine problems (MPs) of Group 6 in the Design and Analysis of Algorithms course. The project features an interactive web application with algorithm visualizations and analysis tools, built with a React TypeScript frontend and FastAPI Python backend.
 
-## Branch Structure
-- **mp2-dev**: Development branch for Machine Problem 2
-- **mp3-dev**: Development branch for Machine Problem 3
-- **mp4-dev**: Development branch for Machine Problem 4
-- **mp5-dev**: Development branch for Machine Problem 5
-- **main**: Compilation of all finalized machine problems and documentation
+## Architecture
+- **Frontend**: React with TypeScript, Vite build tool, and Tailwind CSS for styling
+- **Backend**: FastAPI with Python for algorithm implementations and API endpoints
+- **Visualization**: Interactive step-by-step algorithm visualizations with animation controls
+- **Algorithms**: Implementations of various algorithmic paradigms including Brute Force and Decrease & Conquer
 
 ## Directory Structure
-- `adr/` — Algorithm Design Reports and documentation, organized by machine problem
-- `src/algorithms/` — Source code for algorithms, organized by paradigm and machine problem
-- `machine_problems/` — Problem statements and reference materials
+```
+├── backend/                 # FastAPI backend application
+│   ├── algorithms/          # Algorithm implementations by paradigm
+│   │   ├── brute_force/     # Brute force algorithms
+│   │   └── decrease_and_conquer/  # Decrease and conquer algorithms
+│   ├── routes.py           # API route definitions
+│   ├── api.py              # FastAPI application entry point
+│   └── requirements.txt    # Python dependencies
+├── frontend/               # React TypeScript frontend
+│   ├── src/
+│   │   ├── components/     # React components
+│   │   ├── services/       # API service layer
+│   │   ├── hooks/          # Custom React hooks
+│   │   └── pages/          # Application pages
+│   ├── package.json        # Node.js dependencies
+│   └── vite.config.ts      # Vite configuration
+└── README.md               # Project documentation
+```
 
 ## Group Members
 - CURADA, John Paul M.
@@ -40,49 +55,77 @@ This repository serves as the centralized hub for all machine problems (MPs) of 
 
 ## Environment Setup
 
-### Installing Python
-1. Open Windows PowerShell and execute:
-   ```
-   winget install -e --id Python.Python.3.11
-   ```
-2. During installation, ensure you check the `Add to PATH` option.
-3. Verify installation:
-   ```
-   python --version
+### Prerequisites
+- Python 3.11 or higher
+- Node.js 18 or higher
+- npm or yarn package manager
+
+### Backend Setup
+1. Create and activate a Python virtual environment:
+   ```bash
+   python -m venv virt
+   # On Windows:
+   .\virt\Scripts\activate
+   # On macOS/Linux:
+   source virt/bin/activate
    ```
 
-### Installing Package Manager
-We'll use UV as our package manager:
-
-1. Open Windows PowerShell and run:
+2. Install Python dependencies:
+   ```bash
+   cd backend
+   pip install -r requirements.txt
    ```
-   powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+
+### Frontend Setup
+1. Install Node.js dependencies:
+   ```bash
+   cd frontend
+   npm install
    ```
 
 ## Usage
 
-1. **Clone the repository:**
-   ```
-   git clone https://github.com/JpCurada/g6-machine-problems-daa.git
-   cd g6-machine-problems-daa
-   ```
-2. **Switch to the desired branch:**
-   ```
-   git checkout mp2-dev   # or mp3-dev, mp4-dev, mp5-dev, main
-   ```
-3. **Install dependencies:**
-   ```
-   uv install
-   ```
-4. **Run the Streamlit application (if available):**
-   ```
-   streamlit run src/streamlit_app.py
-   ```
-5. **Open your browser and go to** `http://localhost:8501`
+### Running the Application
 
----
+1. **Start the Backend Server:**
+   ```bash
+   # From the root directory
+   uvicorn backend.api:app --reload
+   ```
+   The API will be available at `http://localhost:8000`
+   API documentation: `http://localhost:8000/docs`
 
-*This repository is for academic use only by Group 6 members of the Design and Analysis of Algorithms course. 
+2. **Start the Frontend Development Server:**
+   ```bash
+   # In a new terminal, from the frontend directory
+   cd frontend
+   npm run dev
+   ```
+   The application will be available at `http://localhost:5173`
+
+### Available Algorithms
+
+**Brute Force Algorithms:**
+- Bubble Sort
+- Selection Sort
+- Linear Search
+- Travelling Salesman Problem
+- Knapsack Problem
+
+**Decrease and Conquer Algorithms:**
+- Binary Search
+- Insertion Sort
+- Josephus Problem
+- Russian Multiplication Method
+
+### Features
+- Interactive algorithm visualization with step-by-step animations
+- Real-time performance metrics and analysis
+- Configurable input parameters for each algorithm
+- Responsive design for desktop and mobile devices
+- API endpoint testing through integrated documentation
+
+This repository is for academic use only by Group 6 members of the Design and Analysis of Algorithms course.
 
 
 
