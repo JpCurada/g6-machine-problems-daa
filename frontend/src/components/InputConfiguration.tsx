@@ -210,7 +210,7 @@ const InputConfiguration: React.FC<InputConfigurationProps> = ({
                                 Running...
                             </span>
                         ) : (
-                            '🚀 Start Simulation'
+                            'Start Simulation'
                         )}
                     </button>
                 </div>

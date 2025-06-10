@@ -240,7 +240,7 @@ const ResultsSection: React.FC<ResultsSectionProps> = ({
                     
                     {/* Search-specific metrics */}
                     <div className="bg-slate-700 bg-opacity-30 rounded-lg p-4">
-                        <h4 className="text-lg font-semibold text-teal-300 mb-3">🔍 Search Analysis</h4>
+                        <h4 className="text-lg font-semibold text-teal-300 mb-3">Search Analysis</h4>
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                             <MetricCard
                                 title="Search Result"
@@ -495,8 +495,7 @@ const ResultsSection: React.FC<ResultsSectionProps> = ({
             {/* Performance summary */}
             <div className="bg-gradient-to-r from-teal-600 to-blue-600 rounded-lg p-6 text-center shadow-xl">
                 <h4 className="text-2xl font-bold text-white mb-3 flex items-center justify-center">
-                    <span className="text-3xl mr-2">🎉</span>
-                    Simulation Complete!
+                    tapos na ^_^
                 </h4>
                 <p className="text-teal-100 text-lg">
                     {selectedAlgorithm} executed successfully in <span className="font-bold">{data.execution_time?.toFixed(3)}ms</span>

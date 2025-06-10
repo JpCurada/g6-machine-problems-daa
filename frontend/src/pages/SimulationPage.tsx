@@ -214,14 +214,33 @@ const SimulationPage: React.FC = () => {
     useEffect(() => {
         const apiHook = getApiHook(selectedAlgorithm);
         if (apiHook) {
+            let enhancedData = apiHook.data;
+            
+            // For search algorithms, enhance the data with original input array and target
+            if (apiHook.data && (selectedAlgorithm === 'Binary Search' || selectedAlgorithm === 'Sequential Search')) {
+                try {
+                    const transformedData = transformInputData(selectedAlgorithm, inputValues);
+                    enhancedData = {
+                        ...apiHook.data,
+                        array: Array.isArray(transformedData.array) ? transformedData.array : [],
+                        target: transformedData.target,
+                        algorithm: selectedAlgorithm
+                    };
+                } catch (error) {
+                    console.error('Error enhancing search data:', error);
+                    enhancedData = apiHook.data;
+                }
+            }
+            
             setCurrentResult({
-                data: apiHook.data,
+                data: enhancedData,
                 loading: apiHook.loading,
                 error: apiHook.error
             });
         }
     }, [
         selectedAlgorithm,
+        inputValues, // Add inputValues as dependency to re-enhance when inputs change
         bubbleSort.data, bubbleSort.loading, bubbleSort.error,
         selectionSort.data, selectionSort.loading, selectionSort.error,
         linearSearch.data, linearSearch.loading, linearSearch.error,

@@ -1,7 +1,7 @@
-// frontend-2/src/services/api.ts
-const API_BASE_URL = 'http://localhost:8000/api';
+const API_BASE_URL = import.meta.env.PROD 
+  ? 'https://mp-prod-g6.railway.app/api'  
+  : 'http://localhost:8000/api';
 
-// Type definitions based on your backend schemas
 export interface SortRequest {
   array: number[];
   ascending: boolean;
@@ -55,6 +55,8 @@ export interface SearchResponse {
   execution_time: number;
   algorithm: string;
   comparisons?: number;
+  array?: (number | string)[];
+  target?: number | string;
 }
 
 export interface TSPResponse {
