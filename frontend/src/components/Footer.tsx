@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import HexeCuteLogo from "../assets/HexeCuteLogo.svg";
 
 const Footer: React.FC = () => {
     const location = useLocation();
@@ -12,7 +13,7 @@ const Footer: React.FC = () => {
             // We're on the landing page, scroll to section
             const element = document.querySelector(href);
             if (element) {
-                element.scrollIntoView({ 
+                element.scrollIntoView({
                     behavior: 'smooth',
                     block: 'start'
                 });
@@ -32,17 +33,15 @@ const Footer: React.FC = () => {
                                      radial-gradient(circle at 75% 75%, #06b6d4 0%, transparent 50%)`
                 }}></div>
             </div>
-            
+
             <div className="relative container mx-auto px-4 py-12">
                 {/* Main Footer Content */}
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
                     {/* Brand Section */}
                     <div className="md:col-span-2 space-y-4">
                         <Link to="/" className="flex items-center group">
-                            <div className="w-12 h-12 bg-gradient-to-br from-teal-400 via-cyan-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg mr-3">
-                                <svg className="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 2L2 7V10C2 16 6 21.5 12 23C18 21.5 22 16 22 10V7L12 2Z" />
-                                </svg>
+                            <div className="w-12 h-12 flex items-center justify-center shadow-lg mr-3">
+                                <img src={HexeCuteLogo} alt="Logo" className="w-16 h-16" />
                             </div>
                             <div>
                                 <h3 className="text-white text-2xl font-bold bg-gradient-to-r from-white via-slate-100 to-slate-300 bg-clip-text text-transparent">
@@ -52,7 +51,7 @@ const Footer: React.FC = () => {
                             </div>
                         </Link>
                         <p className="text-slate-400 leading-relaxed max-w-md">
-                            Interactive algorithm simulations designed to make complex computational concepts 
+                            Interactive algorithm simulations designed to make complex computational concepts
                             accessible through stunning visualizations and step-by-step learning.
                         </p>
                         {/* Social Links */}
@@ -74,8 +73,8 @@ const Footer: React.FC = () => {
                     <div className="space-y-4">
                         <h4 className="text-white font-semibold text-lg mb-4">Navigation</h4>
                         <ul className="space-y-3">
-                            <li><a 
-                                href="#about" 
+                            <li><a
+                                href="#about"
                                 onClick={(e) => {
                                     e.preventDefault();
                                     handleNavClick('#about');
@@ -85,8 +84,8 @@ const Footer: React.FC = () => {
                                 <span className="w-0 group-hover:w-2 h-px bg-teal-400 mr-0 group-hover:mr-2 transition-all duration-200"></span>
                                 About Project
                             </a></li>
-                            <li><a 
-                                href="#features" 
+                            <li><a
+                                href="#features"
                                 onClick={(e) => {
                                     e.preventDefault();
                                     handleNavClick('#features');
@@ -96,8 +95,8 @@ const Footer: React.FC = () => {
                                 <span className="w-0 group-hover:w-2 h-px bg-teal-400 mr-0 group-hover:mr-2 transition-all duration-200"></span>
                                 Features
                             </a></li>
-                            <li><a 
-                                href="#team" 
+                            <li><a
+                                href="#team"
                                 onClick={(e) => {
                                     e.preventDefault();
                                     handleNavClick('#team');
