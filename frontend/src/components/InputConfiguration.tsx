@@ -1,30 +1,75 @@
-import React from 'react';
-import Toggle from './Toggle';
+import { Trash2 } from 'lucide-react';
+import React, { useEffect } from 'react';
 
 interface InputField {
     name: string;
     label: string;
-    type: 'text' | 'number' | 'array' | 'boolean';
+    type: 'text' | 'number' | 'array' | 'boolean' | 'toggle';
     placeholder?: string;
 }
 
 interface InputConfigurationProps {
     selectedAlgorithm: string;
     inputFields: InputField[];
-    inputValues: {[key: string]: string};
+    inputValues: {[key: string]: string | boolean};
     handleInputChange: (fieldName: string, value: string | boolean) => void;
     handleSimulate: () => void;
     isLoading: boolean;
 }
 
+// Toggle component definition
+interface ToggleProps {
+    value: boolean;
+    onChange: (checked: boolean) => void;
+    disabled?: boolean;
+    label?: string;
+}
+
+const Toggle: React.FC<ToggleProps> = ({ value, onChange, disabled = false}) => {
+    // FORCE the initial display to be true (Ascending Order)
+    const displayValue = value !== undefined ? value : true;
+
+    return (
+        <div className="flex items-center">
+            <button
+                type="button"
+                onClick={() => onChange(!displayValue)}
+                disabled={disabled}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-2 focus:ring-offset-slate-700 disabled:opacity-50 ${
+                    displayValue ? 'bg-teal-600' : 'bg-slate-500'
+                }`}
+            >
+                <span
+                    className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                        displayValue ? 'translate-x-6' : 'translate-x-1'
+                    }`}
+                />
+            </button>
+            <span className="ml-3 text-sm font-medium text-slate-300">
+                {displayValue ? 'Ascending Order' : 'Descending Order'}
+            </span>
+        </div>
+    );
+};
+
 const InputConfiguration: React.FC<InputConfigurationProps> = ({
-    selectedAlgorithm,
-    inputFields,
-    inputValues,
-    handleInputChange,
-    handleSimulate,
-    isLoading
-}) => {
+                                                                   selectedAlgorithm,
+                                                                   inputFields,
+                                                                   inputValues,
+                                                                   handleInputChange,
+                                                                   handleSimulate,
+                                                                   isLoading
+                                                               }) => {
+    // Initialize toggle fields to true on mount
+    useEffect(() => {
+        const toggleFields = inputFields.filter(field => field.type === 'boolean' || field.type === 'toggle');
+        toggleFields.forEach(field => {
+            if (inputValues[field.name] === undefined) {
+                handleInputChange(field.name, true);
+            }
+        });
+    }, [inputFields]);
+
     // Suggested values for different algorithms
     const getSuggestedValues = (algorithm: string) => {
         switch (algorithm) {
@@ -32,10 +77,10 @@ const InputConfiguration: React.FC<InputConfigurationProps> = ({
             case 'Selection Sort':
             case 'Insertion Sort':
                 return [
-                    { label: 'Small Array', values: { array: '64,34,25,12,22,11,90', ascending: 'true' } },
-                    { label: 'Reverse Sorted', values: { array: '90,64,34,25,22,12,11', ascending: 'true' } },
-                    { label: 'Nearly Sorted', values: { array: '11,12,22,25,90,34,64', ascending: 'true' } },
-                    { label: 'Large Array', values: { array: '50,30,20,40,70,60,10,90,80,15,25,35,45,55,65,75,85,95', ascending: 'true' } }
+                    { label: 'Small Array', values: { array: '64,34,25,12,22,11,90', isAscending: true } },
+                    { label: 'Reverse Sorted', values: { array: '90,64,34,25,22,12,11', isAscending: true } },
+                    { label: 'Nearly Sorted', values: { array: '11,12,22,25,90,34,64', isAscending: true } },
+                    { label: 'Large Array', values: { array: '50,30,20,40,70,60,10,90,80,15,25,35,45,55,65,75,85,95', isAscending: true } }
                 ];
             case 'Sequential Search':
                 return [
@@ -83,7 +128,7 @@ const InputConfiguration: React.FC<InputConfigurationProps> = ({
         }
     };
 
-    const applySuggestedValues = (suggestion: { label: string; values: { [key: string]: string } }) => {
+    const applySuggestedValues = (suggestion: { label: string; values: { [key: string]: string | boolean } }) => {
         Object.entries(suggestion.values).forEach(([fieldName, value]) => {
             if (inputFields.some(field => field.name === fieldName)) {
                 handleInputChange(fieldName, value);
@@ -94,9 +139,15 @@ const InputConfiguration: React.FC<InputConfigurationProps> = ({
     const renderInputField = (field: InputField) => {
         switch (field.type) {
             case 'boolean':
+            case 'toggle':
+                // FORCE DEFAULT TO TRUE - This will always show "Ascending Order" initially
+                const toggleValue = inputValues[field.name] !== undefined
+                    ? (inputValues[field.name] === true || inputValues[field.name] === 'true')
+                    : true; // This forces it to true when undefined
+
                 return (
                     <Toggle
-                        value={inputValues[field.name] === 'true'}
+                        value={toggleValue}
                         onChange={(newValue: boolean) => handleInputChange(field.name, newValue)}
                         disabled={isLoading}
                         label={field.label}
@@ -105,13 +156,13 @@ const InputConfiguration: React.FC<InputConfigurationProps> = ({
             case 'array':
                 return (
                     <textarea
-                        value={inputValues[field.name] || ''}
+                        value={inputValues[field.name]?.toString() || ''}
                         onChange={(e) => handleInputChange(field.name, e.target.value)}
                         placeholder={field.placeholder}
                         disabled={isLoading}
-                        className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white 
-                                 focus:outline-none focus:ring-2 focus:ring-teal-400 resize-none disabled:opacity-50
-                                 transition-all duration-300 ease-in-out hover:bg-slate-500"
+                        className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white
+                             focus:outline-none focus:ring-2 focus:ring-teal-400 resize-none disabled:opacity-50
+                             transition-all duration-300 ease-in-out hover:bg-slate-500"
                         rows={3}
                     />
                 );
@@ -119,13 +170,13 @@ const InputConfiguration: React.FC<InputConfigurationProps> = ({
                 return (
                     <input
                         type={field.type}
-                        value={inputValues[field.name] || ''}
+                        value={inputValues[field.name]?.toString() || ''}
                         onChange={(e) => handleInputChange(field.name, e.target.value)}
                         placeholder={field.placeholder}
                         disabled={isLoading}
-                        className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white 
-                                 focus:outline-none focus:ring-2 focus:ring-teal-400 disabled:opacity-50
-                                 transition-all duration-300 ease-in-out hover:bg-slate-500"
+                        className="w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-md text-white
+                             focus:outline-none focus:ring-2 focus:ring-teal-400 disabled:opacity-50
+                             transition-all duration-300 ease-in-out hover:bg-slate-500"
                     />
                 );
         }
@@ -154,7 +205,7 @@ const InputConfiguration: React.FC<InputConfigurationProps> = ({
                                         key={index}
                                         onClick={() => applySuggestedValues(suggestion)}
                                         disabled={isLoading}
-                                        className="px-3 py-2 bg-teal-600 hover:bg-teal-700 disabled:bg-gray-500 disabled:cursor-not-allowed 
+                                        className="px-3 py-2 bg-teal-600 hover:bg-teal-700 disabled:bg-gray-500 disabled:cursor-not-allowed
                                                  text-white text-sm rounded-md transition-all duration-200 hover:scale-105 active:scale-95
                                                  border border-teal-500 hover:border-teal-400 shadow-md hover:shadow-lg"
                                     >
@@ -163,7 +214,7 @@ const InputConfiguration: React.FC<InputConfigurationProps> = ({
                                 ))}
                             </div>
                             <p className="text-xs text-slate-400 mt-2">
-                                💡 Click any example above to auto-fill the inputs
+                                Click any example above to auto-fill the inputs
                             </p>
                         </div>
                     )}
@@ -172,20 +223,23 @@ const InputConfiguration: React.FC<InputConfigurationProps> = ({
                     <div className="space-y-4">
                         {inputFields.map((field: InputField) => (
                             <div key={field.name} className="animate-fadeIn">
-                                {field.type !== 'boolean' && (
-                                    <label className="block text-sm font-medium text-slate-300 mb-2 flex items-center">
+                                {field.type !== 'boolean' && field.type !== 'toggle' && (
+                                    <label className="text-sm font-medium text-slate-300 mb-2 flex items-center">
                                         <span>{field.label}</span>
                                         {inputValues[field.name] && (
                                             <button
                                                 onClick={() => handleInputChange(field.name, '')}
-                                                className="ml-2 text-red-400 hover:text-red-300 text-xs"
+                                                className="ml-2 text-red-400 hover:text-red-300 text-xs size-5"
                                                 title="Clear field"
                                             >
-                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                                </svg>
+                                                <Trash2/>
                                             </button>
                                         )}
+                                    </label>
+                                )}
+                                {field.type === 'toggle' && (
+                                    <label className="block text-sm font-medium text-slate-300 mb-2">
+                                        {field.label}
                                     </label>
                                 )}
                                 {renderInputField(field)}
@@ -195,9 +249,15 @@ const InputConfiguration: React.FC<InputConfigurationProps> = ({
 
                     <button
                         onClick={handleSimulate}
-                        disabled={isLoading || !inputFields.every(field => inputValues[field.name] && inputValues[field.name].trim() !== '')}
-                        className="w-full bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700 
-                                 disabled:from-gray-500 disabled:to-gray-600 disabled:cursor-not-allowed 
+                        disabled={isLoading || !inputFields.every(field => {
+                            const value = inputValues[field.name];
+                            if (field.type === 'boolean' || field.type === 'toggle') {
+                                return value !== undefined;
+                            }
+                            return value && value.toString().trim() !== '';
+                        })}
+                        className="w-full bg-gradient-to-r from-teal-600 to-blue-600 hover:from-teal-700 hover:to-blue-700
+                                 disabled:from-gray-500 disabled:to-gray-600 disabled:cursor-not-allowed
                                  text-white font-semibold py-3 px-4 rounded-md transition-all duration-200 mt-6
                                  shadow-lg hover:shadow-xl transform hover:scale-105 active:scale-95"
                     >
@@ -229,4 +289,4 @@ const InputConfiguration: React.FC<InputConfigurationProps> = ({
     );
 };
 
-export default InputConfiguration; 
+export default InputConfiguration;
