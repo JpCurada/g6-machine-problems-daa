@@ -89,6 +89,83 @@ class RussianMultiplyRequest(BaseModel):
             raise ValueError("Numbers too large for demonstration")
         return v
 
+# ===== NEW REQUEST SCHEMAS =====
+
+class DijkstraRequest(BaseModel):
+    graph_data: Dict[str, Union[List[str], List[tuple]]] = Field(
+        ..., 
+        description="Graph data with 'vertices' list and 'edges' list of (vertex1, vertex2, weight) tuples"
+    )
+    start_vertex: str = Field(..., description="Starting vertex name")
+    
+    @field_validator('graph_data')
+    def validate_graph_data(cls, v):
+        if 'vertices' not in v or 'edges' not in v:
+            raise ValueError("Graph data must contain 'vertices' and 'edges' keys")
+        
+        vertices = v['vertices']
+        edges = v['edges']
+        
+        if not isinstance(vertices, list) or len(vertices) == 0:
+            raise ValueError("Vertices must be a non-empty list")
+        
+        if len(vertices) > 20:
+            raise ValueError("Too many vertices (max 20 for demo)")
+        
+        if not isinstance(edges, list):
+            raise ValueError("Edges must be a list")
+        
+        # Validate edges format
+        for edge in edges:
+            if not isinstance(edge, (list, tuple)) or len(edge) != 3:
+                raise ValueError("Each edge must be (vertex1, vertex2, weight)")
+            vertex1, vertex2, weight = edge
+            if vertex1 not in vertices or vertex2 not in vertices:
+                raise ValueError(f"Edge vertices must exist in vertices list")
+            if not isinstance(weight, (int, float)) or weight < 0:
+                raise ValueError("Edge weights must be non-negative numbers")
+        
+        return v
+
+class HuffmanRequest(BaseModel):
+    message: str = Field(..., description="Message to encode using Huffman coding", min_length=1)
+    
+    @field_validator('message')
+    def validate_message(cls, v):
+        if len(v) > 1000:
+            raise ValueError("Message too long (max 1000 characters)")
+        return v
+
+class MatrixMultiplicationRequest(BaseModel):
+    matrix_a: List[List[int]] = Field(..., description="First matrix for multiplication")
+    matrix_b: List[List[int]] = Field(..., description="Second matrix for multiplication")
+    method: str = Field("strassen", description="Multiplication method (default: strassen)")
+    
+    @field_validator('matrix_a', 'matrix_b')
+    def validate_matrices(cls, v):
+        if not v or not v[0]:
+            raise ValueError("Matrix cannot be empty")
+        
+        # Check if matrix is square
+        n = len(v)
+        if not all(len(row) == n for row in v):
+            raise ValueError("Matrix must be square")
+        
+        # Check if size is power of 2 for Strassen
+        if n & (n - 1) != 0:
+            raise ValueError("Matrix size must be a power of 2 for Strassen algorithm")
+        
+        if n > 16:
+            raise ValueError("Matrix too large (max 16x16 for demo)")
+        
+        return v
+    
+    @field_validator('method')
+    def validate_method(cls, v):
+        if v.lower() not in ['strassen']:
+            raise ValueError("Unsupported method. Available: strassen")
+        return v.lower()
+
 class LimitationAnalysisRequest(BaseModel):
     algorithm: str = Field(..., description="Algorithm to analyze")
     input_sizes: List[int] = Field(default=[10, 50, 100, 500, 1000], description="Input sizes to test")
@@ -148,6 +225,37 @@ class RussianMultiplyResponse(BaseModel):
     multiplier: int
     multiplicand: int
 
+# ===== NEW RESPONSE SCHEMAS =====
+
+class DijkstraResponse(BaseModel):
+    distances: Dict[str, float]
+    paths: Dict[str, List[str]]
+    steps: List[str]
+    execution_time: float
+    algorithm: str
+    start_vertex: str
+    vertices_count: int
+
+class HuffmanResponse(BaseModel):
+    codes: Dict[str, str]
+    encoded_message: str
+    character_frequencies: Dict[str, int]
+    steps: List[str]
+    execution_time: float
+    algorithm: str
+    original_length: int
+    encoded_length: int
+    compression_ratio: float
+
+class MatrixMultiplicationResponse(BaseModel):
+    result_matrix: List[List[int]]
+    steps: List[str]
+    execution_time: float
+    algorithm: str
+    method: str
+    matrix_size: int
+    operations_count: Optional[int] = None
+
 class LimitationAnalysisResponse(BaseModel):
     algorithm: str
     analysis_type: str
@@ -164,5 +272,7 @@ class HealthResponse(BaseModel):
 class AlgorithmListResponse(BaseModel):
     brute_force: List[str]
     decrease_and_conquer: List[str]
+    divide_and_conquer: List[str]
+    greedy: List[str]
     optimization: List[str]
     total: int

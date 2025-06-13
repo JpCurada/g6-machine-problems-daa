@@ -37,6 +37,25 @@ export interface RussianMultiplyRequest {
   multiplicand: number;
 }
 
+// NEW REQUEST TYPES
+export interface DijkstraRequest {
+  graph_data: {
+    vertices: string[];
+    edges: [string, string, number][];
+  };
+  start_vertex: string;
+}
+
+export interface HuffmanRequest {
+  message: string;
+}
+
+export interface MatrixMultiplicationRequest {
+  matrix_a: number[][];
+  matrix_b: number[][];
+  method: string;
+}
+
 // Response types
 export interface AlgorithmResponse {
   result: any;
@@ -96,6 +115,39 @@ export interface RussianMultiplyResponse {
   steps_count: number;
   multiplier: number;
   multiplicand: number;
+}
+
+// NEW RESPONSE TYPES
+export interface DijkstraResponse {
+  distances: Record<string, number>;
+  paths: Record<string, string[]>;
+  steps: string[];
+  execution_time: number;
+  algorithm: string;
+  start_vertex: string;
+  vertices_count: number;
+}
+
+export interface HuffmanResponse {
+  codes: Record<string, string>;
+  encoded_message: string;
+  character_frequencies: Record<string, number>;
+  steps: string[];
+  execution_time: number;
+  algorithm: string;
+  original_length: number;
+  encoded_length: number;
+  compression_ratio: number;
+}
+
+export interface MatrixMultiplicationResponse {
+  result_matrix: number[][];
+  steps: string[];
+  execution_time: number;
+  algorithm: string;
+  method: string;
+  matrix_size: number;
+  operations_count?: number;
 }
 
 // API Client class
@@ -185,6 +237,36 @@ class ApiClient {
 
   async russianMultiply(data: RussianMultiplyRequest): Promise<RussianMultiplyResponse> {
     return this.request<RussianMultiplyResponse>('/decrease-conquer/russian-multiply', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  // Divide and Conquer Algorithms
+  async quickSort(data: SortRequest): Promise<AlgorithmResponse> {
+    return this.request<AlgorithmResponse>('/divide-conquer/quick-sort', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async strassenMultiplication(data: MatrixMultiplicationRequest): Promise<MatrixMultiplicationResponse> {
+    return this.request<MatrixMultiplicationResponse>('/divide-conquer/strassen-multiplication', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  // Greedy Algorithms
+  async dijkstra(data: DijkstraRequest): Promise<DijkstraResponse> {
+    return this.request<DijkstraResponse>('/greedy/dijkstra', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async huffmanCoding(data: HuffmanRequest): Promise<HuffmanResponse> {
+    return this.request<HuffmanResponse>('/greedy/huffman-coding', {
       method: 'POST',
       body: JSON.stringify(data),
     });

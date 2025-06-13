@@ -14,6 +14,12 @@ from backend.algorithms.decrease_and_conquer.josephus_problem import josephus_pr
 from backend.algorithms.decrease_and_conquer.russian_peasant_multiplication import russian_multiply   
 from backend.algorithms.decrease_and_conquer.insertion_sort import fnInsertionSort
 
+# NEW ALGORITHM IMPORTS
+from backend.algorithms.greedy.dijkstra import fnDijkstra
+from backend.algorithms.greedy.huffman_code import fnHuffmanCoding
+from backend.algorithms.divide_and_conquer.quick_sort import fnQuickSort
+from backend.algorithms.divide_and_conquer.strassen_multiplication import fnMatrixMultiplication
+
 from backend.comparison.limitations import (
     clsBinarySearchLimitationAnalyzer, 
     clsJosephusProblemLimitationAnalyzer, 
@@ -203,10 +209,9 @@ async def insertion_sort_endpoint(request: SortRequest):
         metadata={
             "input_size": len(request.array),
             "steps_count": len(steps),
-            "complexity": "O(n²)",
+            "complexity": "O(n²) worst case, O(n) best case",
             "stable": True,
-            "in_place": True,
-            "adaptive": True
+            "in_place": True
         }
     )
 
@@ -255,6 +260,109 @@ async def russian_multiply_endpoint(request: RussianMultiplyRequest):
         steps_count=len(halving),
         multiplier=request.multiplier,
         multiplicand=request.multiplicand
+    )
+
+# ===== DIVIDE AND CONQUER ALGORITHMS =====
+
+@router.post("/divide-conquer/quick-sort", response_model=AlgorithmResponse)
+async def quick_sort_endpoint(request: SortRequest):
+    """Execute quicksort algorithm"""
+    result, exec_time, error = time_function(fnQuickSort, request.array, request.ascending)
+    
+    if error:
+        raise HTTPException(status_code=400, detail=error)
+    
+    sorted_result, steps = result
+    return AlgorithmResponse(
+        result=sorted_result,
+        steps=steps,
+        execution_time=exec_time,
+        algorithm="quick-sort",
+        metadata={
+            "input_size": len(request.array),
+            "steps_count": len(steps),
+            "complexity": "O(n log n) average, O(n²) worst case",
+            "stable": False,
+            "in_place": True
+        }
+    )
+
+@router.post("/divide-conquer/strassen-multiplication", response_model=MatrixMultiplicationResponse)
+async def strassen_multiplication_endpoint(request: MatrixMultiplicationRequest):
+    """Execute Strassen's matrix multiplication algorithm"""
+    result, exec_time, error = time_function(
+        fnMatrixMultiplication, 
+        request.matrix_a, 
+        request.matrix_b, 
+        request.method
+    )
+    
+    if error:
+        raise HTTPException(status_code=400, detail=error)
+    
+    result_matrix, steps = result
+    
+    return MatrixMultiplicationResponse(
+        result_matrix=result_matrix,
+        steps=steps,
+        execution_time=exec_time,
+        algorithm="strassen-multiplication",
+        method=request.method,
+        matrix_size=len(request.matrix_a),
+        operations_count=len(steps)
+    )
+
+# ===== GREEDY ALGORITHMS =====
+
+@router.post("/greedy/dijkstra", response_model=DijkstraResponse)
+async def dijkstra_endpoint(request: DijkstraRequest):
+    """Execute Dijkstra's shortest path algorithm"""
+    result, exec_time, error = time_function(
+        fnDijkstra, 
+        request.graph_data, 
+        request.start_vertex
+    )
+    
+    if error:
+        raise HTTPException(status_code=400, detail=error)
+    
+    distances, steps, paths = result
+    
+    return DijkstraResponse(
+        distances=distances,
+        paths=paths,
+        steps=steps,
+        execution_time=exec_time,
+        algorithm="dijkstra",
+        start_vertex=request.start_vertex,
+        vertices_count=len(request.graph_data['vertices'])
+    )
+
+@router.post("/greedy/huffman-coding", response_model=HuffmanResponse)
+async def huffman_coding_endpoint(request: HuffmanRequest):
+    """Execute Huffman coding algorithm"""
+    result, exec_time, error = time_function(fnHuffmanCoding, request.message)
+    
+    if error:
+        raise HTTPException(status_code=400, detail=error)
+    
+    codes, encoded_message, steps, frequencies = result
+    
+    # Calculate compression metrics
+    original_length = len(request.message) * 8  # ASCII bits
+    encoded_length = len(encoded_message)
+    compression_ratio = (encoded_length / original_length) * 100 if original_length > 0 else 0
+    
+    return HuffmanResponse(
+        codes=codes,
+        encoded_message=encoded_message,
+        character_frequencies=frequencies,
+        steps=steps,
+        execution_time=exec_time,
+        algorithm="huffman-coding",
+        original_length=original_length,
+        encoded_length=encoded_length,
+        compression_ratio=compression_ratio
     )
 
 # ===== LIMITATION ANALYSIS ENDPOINTS =====
@@ -418,13 +526,21 @@ async def get_algorithms():
     decrease_conquer = [
         "binary-search", "insertion-sort", "josephus", "russian-multiply"
     ]
+    divide_conquer = [
+        "quick-sort", "strassen-multiplication"
+    ]
+    greedy = [
+        "dijkstra", "huffman-coding"
+    ]
     optimization = ["tsp", "knapsack"]
     
-    total = len(brute_force) + len(decrease_conquer)
+    total = len(brute_force) + len(decrease_conquer) + len(divide_conquer) + len(greedy)
     
     return AlgorithmListResponse(
         brute_force=brute_force,
         decrease_and_conquer=decrease_conquer,
+        divide_and_conquer=divide_conquer,
+        greedy=greedy,
         optimization=optimization,
         total=total
     )
@@ -435,7 +551,7 @@ async def health_check():
     return HealthResponse(
         status="healthy",
         message="Algorithm Visualizer API is running",
-        algorithms_available=9,
+        algorithms_available=13,  # Updated to include new algorithms
         timestamp=datetime.now().isoformat()
     )
 
@@ -488,6 +604,41 @@ async def get_algorithm_info(algorithm: str):
         },
         "insertion-sort": {
             "name": "Insertion Sort",
+            "category": "decrease-and-conquer",
+            "complexity": {"time": "O(n²)", "space": "O(1)"},
+            "characteristics": ["Stable", "In-place", "Adaptive"],
+            "description": "Builds sorted array one element at a time"
+        },
+        "quick-sort": {
+            "name": "Quick Sort",
+            "category": "divide-and-conquer",
+            "complexity": {"time": "O(n log n) avg, O(n²) worst", "space": "O(log n)"},
+            "characteristics": ["Unstable", "In-place", "Divide-and-conquer"],
+            "description": "Efficiently sorts by partitioning around a pivot"
+        },
+        "strassen-multiplication": {
+            "name": "Strassen Matrix Multiplication",
+            "category": "divide-and-conquer",
+            "complexity": {"time": "O(n^2.807)", "space": "O(n²)"},
+            "characteristics": ["Divide-and-conquer", "Optimized multiplication"],
+            "description": "Matrix multiplication using 7 recursive multiplications"
+        },
+        "dijkstra": {
+            "name": "Dijkstra's Shortest Path",
+            "category": "greedy",
+            "complexity": {"time": "O((V + E) log V)", "space": "O(V)"},
+            "characteristics": ["Greedy", "Single-source shortest path", "Non-negative weights"],
+            "description": "Finds shortest paths from source to all vertices"
+        },
+        "huffman-coding": {
+            "name": "Huffman Coding",
+            "category": "greedy",
+            "complexity": {"time": "O(n log n)", "space": "O(n)"},
+            "characteristics": ["Greedy", "Lossless compression", "Optimal prefix codes"],
+            "description": "Creates optimal variable-length codes for data compression"
+        },
+        "josephus": {
+            "name": "Josephus Problem",
             "category": "decrease-and-conquer", 
             "complexity": {"time": "O(n²)", "space": "O(1)"},
             "characteristics": ["Stable", "In-place", "Adaptive", "Online"],
