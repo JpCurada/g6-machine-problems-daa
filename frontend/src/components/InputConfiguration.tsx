@@ -1,4 +1,3 @@
-import { Trash2 } from 'lucide-react';
 import React, { useEffect } from 'react';
 
 interface InputField {
@@ -76,11 +75,13 @@ const InputConfiguration: React.FC<InputConfigurationProps> = ({
             case 'Bubble Sort':
             case 'Selection Sort':
             case 'Insertion Sort':
+            case 'Quick Sort':
                 return [
-                    { label: 'Small Array', values: { array: '64,34,25,12,22,11,90', isAscending: true } },
-                    { label: 'Reverse Sorted', values: { array: '90,64,34,25,22,12,11', isAscending: true } },
-                    { label: 'Nearly Sorted', values: { array: '11,12,22,25,90,34,64', isAscending: true } },
-                    { label: 'Large Array', values: { array: '50,30,20,40,70,60,10,90,80,15,25,35,45,55,65,75,85,95', isAscending: true } }
+                    { label: 'Small Array', values: { array: '64,34,25,12,22,11,90', ascending: true } },
+                    { label: 'Reverse Sorted', values: { array: '90,64,34,25,22,12,11', ascending: true } },
+                    { label: 'Nearly Sorted', values: { array: '11,12,22,25,90,34,64', ascending: true } },
+                    { label: 'Large Array', values: { array: '50,30,20,40,70,60,10,90,80,15,25,35,45,55,65,75,85,95', ascending: true } },
+                    { label: 'Descending', values: { array: '64,34,25,12,22,11,90', ascending: false } }
                 ];
             case 'Sequential Search':
                 return [
@@ -122,6 +123,27 @@ const InputConfiguration: React.FC<InputConfigurationProps> = ({
                     { label: 'Electronics', values: { items: 'Phone:5:300,Laptop:15:500,Tablet:8:400,Watch:2:200', capacity: '20' } },
                     { label: 'Groceries', values: { items: 'Bread:2:3,Milk:3:4,Cheese:1:5,Meat:4:8,Fish:2:6', capacity: '8' } },
                     { label: 'Tools', values: { items: 'Hammer:3:15,Wrench:1:10,Drill:5:25,Saw:4:20', capacity: '10' } }
+                ];
+            case 'Dijkstra\'s Algorithm':
+                return [
+                    { label: 'Simple Path', values: { vertices: 'A,B,C,D', edges: 'A-B-4;A-C-2;B-C-1;B-D-5;C-D-8', start_vertex: 'A' } },
+                    { label: 'Complex Graph', values: { vertices: 'A,B,C,D,E', edges: 'A-B-4;A-C-2;B-C-1;B-D-5;C-D-8;C-E-10;D-E-2', start_vertex: 'A' } },
+                    { label: 'Star Network', values: { vertices: 'Hub,Node1,Node2,Node3', edges: 'Hub-Node1-1;Hub-Node2-3;Hub-Node3-2', start_vertex: 'Hub' } },
+                    { label: 'Linear Chain', values: { vertices: '1,2,3,4,5', edges: '1-2-10;2-3-20;3-4-15;4-5-5', start_vertex: '1' } }
+                ];
+            case 'Huffman Coding':
+                return [
+                    { label: 'Hello World', values: { message: 'hello world' } },
+                    { label: 'Alphabet', values: { message: 'abcdef' } },
+                    { label: 'Repeated Pattern', values: { message: 'aaaaabbbbccccdddd' } },
+                    { label: 'Natural Text', values: { message: 'this is a sample text for huffman coding' } }
+                ];
+            case 'Strassen Matrix Multiplication':
+                return [
+                    { label: '2x2 Simple', values: { matrix_a: '1,2;3,4', matrix_b: '5,6;7,8', method: 'strassen' } },
+                    { label: '2x2 Identity', values: { matrix_a: '1,0;0,1', matrix_b: '5,6;7,8', method: 'strassen' } },
+                    { label: '2x2 Complex', values: { matrix_a: '3,2;1,4', matrix_b: '2,1;3,2', method: 'strassen' } },
+                    { label: 'Traditional vs Strassen', values: { matrix_a: '1,2;3,4', matrix_b: '5,6;7,8', method: 'traditional' } }
                 ];
             default:
                 return [];
@@ -229,10 +251,10 @@ const InputConfiguration: React.FC<InputConfigurationProps> = ({
                                         {inputValues[field.name] && (
                                             <button
                                                 onClick={() => handleInputChange(field.name, '')}
-                                                className="ml-2 text-red-400 hover:text-red-300 text-xs size-5"
+                                                className="ml-2 text-red-400 hover:text-red-300 text-sm w-5 h-5 flex items-center justify-center rounded-full hover:bg-red-500/20 transition-colors"
                                                 title="Clear field"
                                             >
-                                                <Trash2/>
+                                                ×
                                             </button>
                                         )}
                                     </label>

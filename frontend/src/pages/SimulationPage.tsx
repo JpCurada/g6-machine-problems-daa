@@ -8,7 +8,11 @@ import {
     useKnapsackBruteForce,
     useInsertionSort,
     useJosephusProblem,
-    useRussianMultiply
+    useRussianMultiply,
+    useQuickSort,
+    useStrassenMultiplication,
+    useDijkstra,
+    useHuffmanCoding
 } from '../hooks/useApi';
 import ConfigurationSection from '../components/ConfigurationSection';
 import InputConfiguration from '../components/InputConfiguration';
@@ -58,6 +62,12 @@ const SimulationPage: React.FC = () => {
     const insertionSort = useInsertionSort();
     const josephusProblem = useJosephusProblem();
     const russianMultiply = useRussianMultiply();
+    
+    // NEW ALGORITHM HOOKS
+    const quickSort = useQuickSort();
+    const strassenMultiplication = useStrassenMultiplication();
+    const dijkstra = useDijkstra();
+    const huffmanCoding = useHuffmanCoding();
 
     // Map algorithm names to API hook functions
     const getApiHook = (algorithm: string) => {
@@ -71,6 +81,11 @@ const SimulationPage: React.FC = () => {
             case 'Insertion Sort': return insertionSort;
             case 'Josephus Problem': return josephusProblem;
             case 'Russian Multiplication Method': return russianMultiply;
+            // NEW ALGORITHMS
+            case 'Quick Sort': return quickSort;
+            case 'Strassen Matrix Multiplication': return strassenMultiplication;
+            case 'Dijkstra\'s Algorithm': return dijkstra;
+            case 'Huffman Coding': return huffmanCoding;
             default: return null;
         }
     };
@@ -101,6 +116,7 @@ const SimulationPage: React.FC = () => {
             case 'Bubble Sort':
             case 'Selection Sort':
             case 'Insertion Sort':
+            case 'Quick Sort':
                 return [
                     { name: 'array', label: 'Array to Sort', type: 'array', placeholder: 'e.g., 64,34,25,12,22,11,90' },
                     { name: 'ascending', label: 'Sort Order (true=asc, false=desc)', type: 'boolean' }
@@ -114,6 +130,23 @@ const SimulationPage: React.FC = () => {
                 return [
                     { name: 'multiplier', label: 'First Number', type: 'number', placeholder: 'e.g., 17' },
                     { name: 'multiplicand', label: 'Second Number', type: 'number', placeholder: 'e.g., 19' }
+                ];
+            // NEW ALGORITHM INPUT FIELDS
+            case 'Dijkstra\'s Algorithm':
+                return [
+                    { name: 'vertices', label: 'Vertices (comma separated)', type: 'array', placeholder: 'e.g., A,B,C,D,E' },
+                    { name: 'edges', label: 'Edges (format: vertex1-vertex2-weight, semicolon separated)', type: 'array', placeholder: 'e.g., A-B-4;A-C-2;B-C-1;B-D-5;C-D-8;C-E-10;D-E-2' },
+                    { name: 'start_vertex', label: 'Starting Vertex', type: 'text', placeholder: 'e.g., A' }
+                ];
+            case 'Huffman Coding':
+                return [
+                    { name: 'message', label: 'Message to Encode', type: 'text', placeholder: 'e.g., hello world' }
+                ];
+            case 'Strassen Matrix Multiplication':
+                return [
+                    { name: 'matrix_a', label: 'Matrix A (semicolon separated rows)', type: 'array', placeholder: 'e.g., 1,2;3,4' },
+                    { name: 'matrix_b', label: 'Matrix B (semicolon separated rows)', type: 'array', placeholder: 'e.g., 5,6;7,8' },
+                    { name: 'method', label: 'Method', type: 'text', placeholder: 'strassen' }
                 ];
             default:
                 return [
@@ -129,6 +162,7 @@ const SimulationPage: React.FC = () => {
                 case 'Bubble Sort':
                 case 'Selection Sort':
                 case 'Insertion Sort':
+                case 'Quick Sort':
                     return {
                         array: inputs.array?.split(',').map((n: string) => parseFloat(n.trim())).filter((n: number) => !isNaN(n)) || [],
                         ascending: inputs.ascending?.toLowerCase() !== 'false'
@@ -175,6 +209,39 @@ const SimulationPage: React.FC = () => {
                     return {
                         multiplier: parseInt(inputs.multiplier || '0'),
                         multiplicand: parseInt(inputs.multiplicand || '0')
+                    };
+
+                // NEW ALGORITHM TRANSFORMATIONS
+                case 'Dijkstra\'s Algorithm':
+                    const vertices = inputs.vertices?.split(',').map((v: string) => v.trim()) || [];
+                    const edges = inputs.edges?.split(';').map((edge: string) => {
+                        const [v1, v2, weight] = edge.split('-');
+                        return [v1?.trim() || '', v2?.trim() || '', parseFloat(weight || '0')] as [string, string, number];
+                    }) || [];
+                    return {
+                        graph_data: {
+                            vertices: vertices,
+                            edges: edges
+                        },
+                        start_vertex: inputs.start_vertex?.trim() || ''
+                    };
+
+                case 'Huffman Coding':
+                    return {
+                        message: inputs.message || ''
+                    };
+
+                case 'Strassen Matrix Multiplication':
+                    const matrixA = inputs.matrix_a?.split(';').map((row: string) => 
+                        row.split(',').map((n: string) => parseInt(n.trim())).filter((n: number) => !isNaN(n))
+                    ) || [];
+                    const matrixB = inputs.matrix_b?.split(';').map((row: string) => 
+                        row.split(',').map((n: string) => parseInt(n.trim())).filter((n: number) => !isNaN(n))
+                    ) || [];
+                    return {
+                        matrix_a: matrixA,
+                        matrix_b: matrixB,
+                        method: inputs.method || 'strassen'
                     };
 
                 default:
@@ -249,7 +316,12 @@ const SimulationPage: React.FC = () => {
         knapsackBruteForce.data, knapsackBruteForce.loading, knapsackBruteForce.error,
         insertionSort.data, insertionSort.loading, insertionSort.error,
         josephusProblem.data, josephusProblem.loading, josephusProblem.error,
-        russianMultiply.data, russianMultiply.loading, russianMultiply.error
+        russianMultiply.data, russianMultiply.loading, russianMultiply.error,
+        // NEW ALGORITHM DEPENDENCIES
+        quickSort.data, quickSort.loading, quickSort.error,
+        strassenMultiplication.data, strassenMultiplication.loading, strassenMultiplication.error,
+        dijkstra.data, dijkstra.loading, dijkstra.error,
+        huffmanCoding.data, huffmanCoding.loading, huffmanCoding.error
     ]);
 
     const handleInputChange = (fieldName: string, value: string | boolean) => {
@@ -284,7 +356,7 @@ const SimulationPage: React.FC = () => {
             // Josephus Problem
             maxSteps = currentResult.data.elimination_order.length - 1;
         } else if (currentResult.data?.steps) {
-            // Sorting algorithms
+            // Sorting algorithms and others
             maxSteps = currentResult.data.steps.length - 1;
         } else {
             return; // No animation data available

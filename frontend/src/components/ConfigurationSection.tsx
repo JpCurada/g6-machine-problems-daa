@@ -33,14 +33,13 @@ const ConfigurationSection: React.FC<ConfigurationSectionProps> = ({
             'Russian Multiplication Method',
             'Josephus Problem'
         ],
+        'divide-conquer': [
+            'Quick Sort',
+            'Strassen Matrix Multiplication'
+        ],
         'greedy': [
             'Dijkstra\'s Algorithm',
-            'Strassen\'s Matrix Multiplication'
-        ],
-        'divide-conquer': [
-            'Merge Sort',
-            'Quick Sort',
-            'Binary Search Tree',
+            'Huffman Coding'
         ]
     };
 
@@ -65,8 +64,8 @@ const ConfigurationSection: React.FC<ConfigurationSectionProps> = ({
                     </option>
                     <option value="brute-force">Brute Force</option>
                     <option value="decrease-conquer">Decrease and Conquer</option>
-                    <option value="greedy">Greedy</option>
                     <option value="divide-conquer">Divide and Conquer</option>
+                    <option value="greedy">Greedy</option>
                 </select>
             </div>
 

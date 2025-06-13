@@ -9,12 +9,18 @@ import type {
   KnapsackRequest,
   JosephusRequest,
   RussianMultiplyRequest,
+  DijkstraRequest,
+  HuffmanRequest,
+  MatrixMultiplicationRequest,
   AlgorithmResponse,
   SearchResponse,
   TSPResponse,
   KnapsackResponse,
   JosephusResponse,
   RussianMultiplyResponse,
+  DijkstraResponse,
+  HuffmanResponse,
+  MatrixMultiplicationResponse,
 } from '../services/api';
 
 interface UseApiState<T> {
@@ -95,6 +101,23 @@ export const useJosephusProblem = () => {
 
 export const useRussianMultiply = () => {
   return useApi<RussianMultiplyResponse>((data: RussianMultiplyRequest) => apiClient.russianMultiply(data));
+};
+
+// NEW ALGORITHM HOOKS
+export const useQuickSort = () => {
+  return useApi<AlgorithmResponse>((data: SortRequest) => apiClient.quickSort(data));
+};
+
+export const useStrassenMultiplication = () => {
+  return useApi<MatrixMultiplicationResponse>((data: MatrixMultiplicationRequest) => apiClient.strassenMultiplication(data));
+};
+
+export const useDijkstra = () => {
+  return useApi<DijkstraResponse>((data: DijkstraRequest) => apiClient.dijkstra(data));
+};
+
+export const useHuffmanCoding = () => {
+  return useApi<HuffmanResponse>((data: HuffmanRequest) => apiClient.huffmanCoding(data));
 };
 
 // Utility hooks
