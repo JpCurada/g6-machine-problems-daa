@@ -10,14 +10,13 @@ Strassen's algorithm is a divide-and-conquer matrix multiplication algorithm
 that reduces the number of scalar multiplications from O(n³) to O(n^2.807) by 
 using 7 recursive multiplications instead of the standard 8.
 
-Primary Problem: Standard matrix multiplication has O(n³) time complexity, 
-making it computationally expensive for large matrices.
-
-Solution Benefits:
-Time Complexity: Reduces from O(n³) to O(n^2.807)
-Scalability: Significant performance gains for large matrices (n > 1000)
-Practical Impact: Enables faster computation in scientific computing, machine learning, and graphics applications
-
+Strassen's algorithm solves the problem of slow matrix multiplication by using a 
+divide-and-conquer approach that breaks large matrices into smaller pieces and multiplies 
+them more efficiently. Regular matrix multiplication takes O(n³) time, which becomes very 
+slow for big matrices, but Strassen's method reduces this to O(n^2.807) by using 
+only 7 multiplications instead of 8 when combining the smaller matrix pieces. This makes it 
+much faster for large matrices used in scientific computing, machine learning, and graphics, 
+allowing computers to handle bigger problems that would otherwise take too long to solve.
 
 **3.4.2 Divide and Conquer Strategy**  
 ```python
@@ -28,7 +27,7 @@ This implementation uses divide-and-conquer to multiply matrices faster than the
 
 How it works:
 1. Divide each matrix into 4 quadrants (submatrices)
-2. Use 7 clever multiplications instead of 8 to compute the result
+2. Use 7 multiplications instead of 8 to compute the result
 3. Recursively apply this to submatrices until they're small enough
 4. For matrices not power-of-2 size, we pad with zeros
 
